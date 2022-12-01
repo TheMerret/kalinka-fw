@@ -118,6 +118,8 @@ byte parse_command(byte command, byte prev_state) {
           new_state = RESUME;
       };
       break;
+    default:
+      Serial.println("error");
   };
   return new_state;
 }
@@ -171,7 +173,8 @@ struct ScanningState {
 };
 
 struct ScanningState get_new_scanning_state() {
-  return (ScanningState) {};
+  struct ScanningState s;
+  return s;
 }
 
 void scan_next_step(ScanningState scanning_state) {
@@ -182,25 +185,32 @@ void stop_scanning() {
   Serial.println("стоп сканирование");
 }
 
+ScanningState scanning_state;
+
 void loop() {
   if (Serial.available() > 0) {
-    byte command = Serial.read();
+    byte command = Serial.parseInt();
+    Serial.println(command);
     state = parse_command(command, state);
+
   }
   switch (state) {
     case START:
       reset_scan();
       state = SCANNING;
-      ScanningState scanning_state;
       scanning_state = get_new_scanning_state();
+      break;
     case SCANNING:
       process_sensors();
       scan_next_step(scanning_state);
+      break;
     case STOP:
       stop_scanning();
-    //    case PAUSE:
-    //      pass;
+      break;
+//    case PAUSE:
+//      pass;
     case RESUME:
       state = SCANNING;
+      break;
   }
 }
