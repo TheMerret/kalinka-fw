@@ -1,3 +1,6 @@
+//Максим сосет хуй
+
+
 const byte SENSOR1_ID = 1;
 const byte SENSOR2_ID = 2;
 
