@@ -191,12 +191,12 @@ struct ScanningState get_new_scanning_state() {
 }
 
 void rotate_sensor1_horizontal(float degree) {
-  Serial.print("senso1 1 rotate horizontally on ");
+  Serial.print("sensor 1 rotate horizontally on ");
   Serial.println(degree);
 }
 
 void rotate_scene(float degree) {
-  Serial.print("rotate scene on");
+  Serial.print("rotate scene on ");
   Serial.println(degree);
 }
 
