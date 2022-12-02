@@ -89,7 +89,7 @@ void reset_sensors() {
 }
 
 void reset_scene_origin() {
-  Serial.println("стол сброс поворота");
+  Serial.println("scene reset rotation");
 }
 
 void reset_scan() {
