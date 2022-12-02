@@ -21,11 +21,11 @@ void setup() {
 }
 
 void reset_sensor2_height() {
-  Serial.println("сенсор 2 сброс высоты");
+  Serial.println("sensor 2 reset height");
 }
 
 void reset_sensor1_height() {
-  Serial.println("сенсор 1 сброс высоты");
+  Serial.println("sensor 1 reset height");
 }
 
 void reset_sensor_height(byte sensor_id) {
@@ -40,11 +40,11 @@ void reset_sensor_height(byte sensor_id) {
 }
 
 void reset_sensor2_vertical_angle() {
-  Serial.println("сенсор 2 сброс вертикального поворота");
+  Serial.println("reset 2 reset vertical rotation");
 }
 
 void reset_sensor2_horizontal_angle() {
-  Serial.println("сенсор 2 сброс горизонтального поворота");
+  Serial.println("sensor 2 reset horizontal rotation");
 }
 
 void reset_sensor2_angles() {
@@ -53,11 +53,11 @@ void reset_sensor2_angles() {
 }
 
 void reset_sensor1_vertical_angle() {
-  Serial.println("сенсор 1 сброс вертикального поворота");
+  Serial.println("reset 1 reset vertical rotation");
 }
 
 void reset_sensor1_horizontal_angle() {
-  Serial.println("сенсор 1 сброс горизонтального поворота");
+  Serial.println("sensor 1 reset horizontal rotation");
 }
 
 void reset_sensor1_angles() {
@@ -191,17 +191,17 @@ struct ScanningState get_new_scanning_state() {
 }
 
 void rotate_sensor1_horizontal(float degree) {
-  Serial.print("сенсор 1 повернуть по горизонтали на ");
+  Serial.print("senso1 1 rotate horizontally on ");
   Serial.println(degree);
 }
 
 void rotate_scene(float degree) {
-  Serial.print("стол повернуть на");
+  Serial.print("rotate scene on");
   Serial.println(degree);
 }
 
 void raise_sensor1_height(float height) {
-  Serial.print("сенсор 1 поднять на ");
+  Serial.print("sensor 1 raise on");
   Serial.println(height);
 }
 
@@ -233,7 +233,7 @@ byte scan_next_step() {
 }
 
 void stop_scanning() {
-  Serial.println("стоп сканирование");
+  Serial.println("stop scanning");
 }
 
 
