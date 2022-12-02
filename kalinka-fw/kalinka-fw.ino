@@ -209,6 +209,10 @@ byte scan_next_step() {
   if ((scanning_state).scene_angle == MAX_SCENE_ROTATION) {
     return STOP;
   };
+  rotate_scene(+SCENE_ROTATION_STEP);  // по часовой
+  (scanning_state).scene_angle += SCENE_ROTATION_STEP;
+  rotate_sensor1_horizontal(-SENSOR_ROTATION_STEP); // в другую от стола
+  (scanning_state).sensor1.horizontal_degree -= SENSOR_ROTATION_STEP; 
   if ((scanning_state).sensor1.height > MAX_SCENE_ROTATION_STEP) {
     reset_sensor1_horizontal_angle();
     (scanning_state).sensor1.height = 0.0;
@@ -216,19 +220,15 @@ byte scan_next_step() {
     (scanning_state).scene_angle = 0.0;
     reset_sensor1_height();
     (scanning_state).sensor1.height = 0;
-  } else if ((int)scanning_state.scene_angle % (int)MAX_SCENE_ROTATION_STEP == 0) {
+  };
+  if ((int)scanning_state.scene_angle % (int)MAX_SCENE_ROTATION_STEP == 0) {
     reset_sensor1_horizontal_angle();
     (scanning_state).sensor1.horizontal_degree = 0.0;
     reset_scene_origin();
     (scanning_state).scene_angle = 0.0;
     raise_sensor1_height(SENSOR_HEIGHT_STEP);
     (scanning_state).sensor1.height += SENSOR_HEIGHT_STEP;
-  } else {
-    rotate_scene(+SCENE_ROTATION_STEP);  // по часовой
-    (scanning_state).scene_angle += SCENE_ROTATION_STEP;
-    rotate_sensor1_horizontal(-SENSOR_ROTATION_STEP); // в другую от стола
-    (scanning_state).sensor1.horizontal_degree -= SENSOR_ROTATION_STEP;
-  }
+  };
   return SCANNING; 
 }
 
