@@ -160,6 +160,10 @@ struct SensorsData capture_sensors() {
   sd.sensor1.sensor_state.height = scanning_state.sensor1.height;
   sd.sensor1.sensor_state.horizontal_degree = scanning_state.sensor1.horizontal_degree;
   sd.sensor1.sensor_state.vertical_degree = scanning_state.sensor1.vertical_degree;
+  float volts = analogRead(0) * (5/1024);
+  Serial.println(volts);
+  int distance = 13 * pow(volts, -1);
+  sd.sensor1.distance = distance;
   return sd;
 }
 
@@ -201,18 +205,19 @@ void rotate_scene(float degree) {
 }
 
 void raise_sensor1_height(float height) {
-  Serial.print("sensor 1 raise on");
+  Serial.print("sensor 1 raise on ");
   Serial.println(height);
 }
 
 byte scan_next_step() {
+  if (((scanning_state).scene_angle + SCENE_ROTATION_STEP == MAX_SCENE_ROTATION) and
+  ((scanning_state).sensor1.height + SENSOR_HEIGHT_STEP > SENSOR_MAX_HEIGHT)) {
+    return STOP;
+  };
   rotate_scene(+SCENE_ROTATION_STEP);  // по часовой
   (scanning_state).scene_angle += SCENE_ROTATION_STEP;
   rotate_sensor1_horizontal(-SENSOR_ROTATION_STEP); // в другую от стола
   (scanning_state).sensor1.horizontal_degree -= SENSOR_ROTATION_STEP;
-  if ((scanning_state).scene_angle > MAX_SCENE_ROTATION) {
-    return STOP;
-  };
   if ((scanning_state).sensor1.height > SENSOR_MAX_HEIGHT) {
     reset_sensor1_horizontal_angle();
     (scanning_state).sensor1.height = 0.0;
