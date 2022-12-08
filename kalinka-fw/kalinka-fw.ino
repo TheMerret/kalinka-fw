@@ -9,11 +9,13 @@ const byte RESUME = 4;
 const byte PENDING = 5;
 
 const float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
-const float MAX_SCENE_ROTATION = 90.0;
+const float MAX_SCENE_ROTATION = 30.0;
 const float SENSOR_HEIGHT_STEP = 1.0;
 const float SCENE_ROTATION_STEP = 1.0;
-const float SENSOR_ROTATION_STEP = 1.0;
-const float SENSOR_MAX_HEIGHT = 3.0;
+const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
+const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
+const float SENSOR_MAX_HEIGHT = 1.0;
+const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
 
 byte state = PENDING;
 
@@ -67,7 +69,7 @@ void reset_sensor_height(byte sensor_id) {
 
 void reset_sensor2_vertical_angle() {
   Serial.println("reset 2 reset vertical rotation");
-  scanning_state.sensor2.vertical_degree = 0;
+  scanning_state.sensor2.vertical_degree = -MAX_SENSOR_VERTICAL_ROTATION;
 }
 
 void reset_sensor2_horizontal_angle() {
@@ -82,7 +84,7 @@ void reset_sensor2_angles() {
 
 void reset_sensor1_vertical_angle() {
   Serial.println("reset 1 reset vertical rotation");
-  scanning_state.sensor1.vertical_degree = 0;
+  scanning_state.sensor1.vertical_degree = -MAX_SENSOR_VERTICAL_ROTATION;
 }
 
 void reset_sensor1_horizontal_angle() {
@@ -181,7 +183,7 @@ void send_scanning_data(SensorsData sensors_data) {
 }
 
 void process_sensors() {
-  SensorsData sensors_data = capture_sensors();
+  SensorsData sensors_data = capture_sensors();    
   send_scanning_data(sensors_data);
 }
 
@@ -196,6 +198,12 @@ void rotate_sensor2_horizontal(float degree) {
   scanning_state.sensor2.horizontal_degree += degree;
 }
 
+void rotate_sensor2_vertical(float degree) {
+  Serial.print("sensor 2 rotate vertically on ");
+  Serial.println(degree);
+  scanning_state.sensor2.vertical_degree += degree;
+}
+
 void raise_sensor2_height(float height) {
   Serial.print("sensor 2 raise on ");
   Serial.println(height);
@@ -206,6 +214,12 @@ void rotate_sensor1_horizontal(float degree) {
   Serial.print("sensor 1 rotate horizontally on ");
   Serial.println(degree);
   scanning_state.sensor1.horizontal_degree += degree;
+}
+
+void rotate_sensor1_vertical(float degree) {
+  Serial.print("sensor 1 rotate vertically on ");
+  Serial.println(degree);
+  scanning_state.sensor1.vertical_degree += degree;
 }
 
 void raise_sensor1_height(float height) {
@@ -225,9 +239,17 @@ byte scan_next_step() {
   ((scanning_state).sensor1.height + SENSOR_HEIGHT_STEP > SENSOR_MAX_HEIGHT)) {
     return STOP;
   };
+  if (scanning_state.sensor1.vertical_degree != MAX_SENSOR_VERTICAL_ROTATION) {
+    rotate_sensor1_vertical(SENSOR_VERTICAL_ROTATION_STEP);
+    rotate_sensor2_vertical(SENSOR_VERTICAL_ROTATION_STEP);
+    return SCANNING;
+  } else {
+    reset_sensor1_vertical_angle();
+    reset_sensor2_vertical_angle();
+  }
   rotate_scene(+SCENE_ROTATION_STEP);  // по часовой
-  rotate_sensor1_horizontal(-SENSOR_ROTATION_STEP); // в другую от стола
-  rotate_sensor2_horizontal(-SENSOR_ROTATION_STEP);
+  rotate_sensor1_horizontal(-SENSOR_HORIZONTAL_ROTATION_STEP); // в другую от стола
+  rotate_sensor2_horizontal(-SENSOR_HORIZONTAL_ROTATION_STEP);
   if ((scanning_state).sensor1.height > SENSOR_MAX_HEIGHT) {
     reset_sensor1_horizontal_angle();
     reset_sensor1_height();
