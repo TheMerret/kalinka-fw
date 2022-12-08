@@ -1,3 +1,7 @@
+#define sensor1 A0
+#define sensor2 A1
+
+
 const byte SENSOR1_ID = 1;
 const byte SENSOR2_ID = 2;
 
@@ -159,6 +163,8 @@ byte parse_command(byte command, byte prev_state) {
 
 struct SensorsData capture_sensors() {
   SensorsData sd;
+  float volts = analogRead(sensor1) * 0.0048828125;
+  sd.sensor1.distance = 13 * pow(volts, -1);
   return sd;
 }
 
