@@ -20,8 +20,12 @@ const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
 const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
 const float SENSOR_MAX_HEIGHT = 1.0;
 const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
+const byte SCANNING_HORIZONTALLY = 1;
+const byte SCANNING_VERTICALLY = 2;
+const byte SCANNING_BOTH_DIRECTIONS =  3;
 
 byte state = PENDING;
+byte scannig_direction = SCANNING_HORIZONTALLY;
 
 void setup() {
   Serial.begin(9600);
@@ -73,7 +77,13 @@ void reset_sensor_height(byte sensor_id) {
 
 void reset_sensor2_vertical_angle() {
   Serial.println("reset 2 reset vertical rotation");
-  scanning_state.sensor2.vertical_degree = -MAX_SENSOR_VERTICAL_ROTATION;
+  float degree;
+  if (scannig_direction & SCANNING_VERTICALLY) {
+    degree = -MAX_SENSOR_VERTICAL_ROTATION;
+  } else {
+    degree = 0.0;
+  }
+  scanning_state.sensor2.vertical_degree = degree;
 }
 
 void reset_sensor2_horizontal_angle() {
@@ -88,7 +98,12 @@ void reset_sensor2_angles() {
 
 void reset_sensor1_vertical_angle() {
   Serial.println("reset 1 reset vertical rotation");
-  scanning_state.sensor1.vertical_degree = -MAX_SENSOR_VERTICAL_ROTATION;
+  float degree;
+  if (scannig_direction & SCANNING_VERTICALLY) {
+    degree = -MAX_SENSOR_VERTICAL_ROTATION;
+  } else {
+    degree = 0.0;
+  }
 }
 
 void reset_sensor1_horizontal_angle() {
@@ -245,24 +260,32 @@ byte scan_next_step() {
   ((scanning_state).sensor1.height + SENSOR_HEIGHT_STEP > SENSOR_MAX_HEIGHT)) {
     return STOP;
   };
-  if (scanning_state.sensor1.vertical_degree != MAX_SENSOR_VERTICAL_ROTATION) {
-    rotate_sensor1_vertical(SENSOR_VERTICAL_ROTATION_STEP);
-    rotate_sensor2_vertical(SENSOR_VERTICAL_ROTATION_STEP);
-    return SCANNING;
-  } else {
-    reset_sensor1_vertical_angle();
-    reset_sensor2_vertical_angle();
+  if (scannig_direction & SCANNING_VERTICALLY) {
+    if (scanning_state.sensor1.vertical_degree != MAX_SENSOR_VERTICAL_ROTATION) {
+      rotate_sensor1_vertical(SENSOR_VERTICAL_ROTATION_STEP);
+      rotate_sensor2_vertical(SENSOR_VERTICAL_ROTATION_STEP);
+      return SCANNING;
+    } else {
+      reset_sensor1_vertical_angle();
+      reset_sensor2_vertical_angle();
+    }
   }
   rotate_scene(+SCENE_ROTATION_STEP);  // по часовой
   rotate_sensor1_horizontal(-SENSOR_HORIZONTAL_ROTATION_STEP); // в другую от стола
   rotate_sensor2_horizontal(-SENSOR_HORIZONTAL_ROTATION_STEP);
   if ((scanning_state).sensor1.height > SENSOR_MAX_HEIGHT) {
-    reset_sensor1_horizontal_angle();
+    if (scannig_direction & SCANNING_HORIZONTALLY) {
+      reset_sensor1_horizontal_angle();
+      reset_sensor2_horizontal_angle();
+    }
     reset_sensor1_height();
-    reset_sensor2_horizontal_angle();
     reset_sensor2_height();
     rotate_scene(+MAX_SCENE_ROTATION_STEP);
   } else if ((int)scanning_state.scene_angle % (int)MAX_SCENE_ROTATION_STEP == 0) {
+    if (scannig_direction & SCANNING_HORIZONTALLY) {
+      reset_sensor1_horizontal_angle();
+      reset_sensor2_horizontal_angle();
+    }
     reset_sensor1_horizontal_angle();
     reset_sensor2_horizontal_angle();
     rotate_scene(-MAX_SCENE_ROTATION_STEP);
