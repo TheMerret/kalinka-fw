@@ -320,14 +320,14 @@ struct Intersections get_line_cube_intersection(float scene_angle, float horizon
     }
     if (ind != 2) {
         struct Point p1;
-        p1.x = 1/0;
-        p1.y = 1/0;
-        p1.z = 1/0;
+        p1.x = INFINITY;
+        p1.y = INFINITY;
+        p1.z = INFINITY;
         intersections.arr[0] = p1;
         struct Point p2;
-        p2.x = 1/0;
-        p2.y = 1/0;
-        p2.z = 1/0;
+        p2.x = INFINITY;
+        p2.y = INFINITY;
+        p2.z = INFINITY;
         intersections.arr[1] = p2;
     }
     return intersections;
