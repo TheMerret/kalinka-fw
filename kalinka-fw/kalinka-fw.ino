@@ -1,5 +1,7 @@
 #include <Math.h>
 
+#include "Scanner.h"
+
 #define sensor1 A0
 #define sensor2 A1
 
@@ -22,7 +24,6 @@ const float SCENE_ROTATION_STEP = 1.0;
 const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
 const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
 const float SENSOR_MAX_HEIGHT = 3.0;
-const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
 const byte SCANNING_HORIZONTALLY = 1;
 const byte SCANNING_VERTICALLY = 2;
 const byte SCANNING_BOTH_DIRECTIONS =  3;
@@ -518,6 +519,8 @@ void stop_scanning() {
 }
 
 void loop() {
+  Scanner s;
+  s.reset();
   if (Serial.available() > 0) {
     byte command = Serial.parseInt();
     // Serial.println(command);
