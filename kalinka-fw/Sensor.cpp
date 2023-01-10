@@ -2,6 +2,10 @@
 
 #include "Sensor.h"
 
+void Sensor::captureDistance() {
+  Serial.println("sensor capture distance");
+}
+
 void Sensor::rotateVertically(float degree) {
   Serial.print("sensor 1 rotate vertically on ");
   Serial.println(degree);

@@ -1,6 +1,7 @@
 #include <Math.h>
 
 #include "Scanner.h"
+#include "Sensor.h"
 
 #define sensor1 A0
 #define sensor2 A1
@@ -412,7 +413,7 @@ void send_scanning_data(SensorsData sensors_data) {
 }
 
 void process_sensors() {
-  SensorsData sensors_data = capture_sensors();    
+  SensorsData sensors_data = capture_sensors();
   send_scanning_data(sensors_data);
 }
 
@@ -519,8 +520,10 @@ void stop_scanning() {
 }
 
 void loop() {
-  Scanner s;
-  s.reset();
+  Sensor sensor1(1, 2, 3);
+  Sensor sensor2(4, 5, 6);
+  Scanner scanner(7, sensor1, sensor2);
+  scanner.reset();
   if (Serial.available() > 0) {
     byte command = Serial.parseInt();
     // Serial.println(command);
