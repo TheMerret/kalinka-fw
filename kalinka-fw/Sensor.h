@@ -6,17 +6,17 @@
 class Sensor {
   public:
     void reset();
-    void reset_height();
-    void reset_horizontal_angle();    
-    void reset_vertical_angle();
-    void rotate_vertically(float);
-    void rotate_horizontally(float);
+    void resetHeight();
+    void resetHorizontalAngle();    
+    void resetVerticalAngle();
+    void rotateVertically(float);
+    void rotateHorizontally(float);
     void raise(float);
 
   private:
     float height = 0.0;
-    float horizontal_angle = 0.0;
-    float vertical_angle = 0.0;
+    float horizontalAngle = 0.0;
+    float verticalAngle = 0.0;
   
 };
 

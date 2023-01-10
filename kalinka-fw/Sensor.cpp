@@ -2,16 +2,16 @@
 
 #include "Sensor.h"
 
-void Sensor::rotate_vertically(float degree) {
+void Sensor::rotateVertically(float degree) {
   Serial.print("sensor 1 rotate vertically on ");
   Serial.println(degree);
-  vertical_angle += degree;
+  verticalAngle += degree;
 }
 
-void Sensor::rotate_horizontally(float degree) {
+void Sensor::rotateHorizontally(float degree) {
   Serial.print("sensor 1 rotate horizontally on ");
   Serial.println(degree);
-  horizontal_angle += degree;
+  horizontalAngle += degree;
 }
 
 void Sensor::raise(float h) {
@@ -20,23 +20,23 @@ void Sensor::raise(float h) {
   height += h;
 }
 
-void Sensor::reset_horizontal_angle() {
+void Sensor::resetHorizontalAngle() {
   Serial.println("reset reset horizontal rotation");
-  horizontal_angle = 0.0;
+  horizontalAngle = 0.0;
 }
 
-void Sensor::reset_vertical_angle() {
+void Sensor::resetVerticalAngle() {
   Serial.println("sensor reset vertical rotation");
-  vertical_angle = 0.0;  // TODO: (scannig_direction & SCANNING_VERTICALLY) ? -MAX_SENSOR_VERTICAL_ROTATION : 0.0;
+  verticalAngle = 0.0;  // TODO: (scannig_direction & SCANNING_VERTICALLY) ? -MAX_SENSOR_VERTICAL_ROTATION : 0.0;
 }
 
-void Sensor::reset_height() {
+void Sensor::resetHeight() {
   Serial.println("sensor reset height");
-  height = 0;
+  height = 0.0;
 }
 
 void Sensor::reset() {
-  reset_horizontal_angle();
-  reset_vertical_angle();
-  reset_height();
+  resetHorizontalAngle();
+  resetVerticalAngle();
+  resetHeight();
 }

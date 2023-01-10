@@ -6,13 +6,13 @@
 class Scanner {
   public:
     void reset();
-    void rotate_scene(float);
+    void rotateScene(float);
 
   private:
-    void reset_sensors();
-    void reset_scene_origin();
+    void resetSensors();
+    void resetSceneOrigin();
 
-    float scene_angle = 0.0;
+    float sceneAngle = 0.0;
     Sensor sensor1;
     Sensor sensor2;
 };
