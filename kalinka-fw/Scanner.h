@@ -17,8 +17,13 @@ private:
 public:
   Scanner(const int sp, Sensor snr1, Sensor snr2):
    scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+  
   void reset();
   void rotateScene(float);
+
+  float getSceneAngle() {
+    return sceneAngle;
+  }
 };
 
 #endif

@@ -2,8 +2,10 @@
 
 #include "Sensor.h"
 
-void Sensor::captureDistance() {
+float Sensor::captureDistance() {
   Serial.println("sensor capture distance");
+  float volts = analogRead(sensorPin) * 0.0048828125;
+  return 13 * pow(volts, -1);
 }
 
 void Sensor::rotateVertically(float degree) {

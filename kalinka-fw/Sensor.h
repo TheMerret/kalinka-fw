@@ -8,14 +8,16 @@ private:
   int heightPin;
   int horizontalPin;
   int verticalPin;
+  int sensorPin;
 
   float height = 0.0;
   float horizontalAngle = 0.0;
   float verticalAngle = 0.0;
 
 public:
-  Sensor(const int htp, const int hlp, const int vp)
-    : heightPin(htp), horizontalPin(hlp), verticalPin(vp) {}
+  Sensor(const int htp, const int hlp, const int vp, const int sp)
+    : heightPin(htp), horizontalPin(hlp), verticalPin(vp), sensorPin(sp) {}
+  
   void reset();
   void resetHeight();
   void resetHorizontalAngle();
@@ -23,7 +25,17 @@ public:
   void rotateVertically(float);
   void rotateHorizontally(float);
   void raise(float);
-  void captureDistance();
+  float captureDistance();
+
+  float getHeight() {
+    return height;
+  }
+  float getHorizontalAngle() {
+    return horizontalAngle;
+  }
+  float getVerticalAngle() {
+    return verticalAngle;
+  }  
 };
 
 #endif
