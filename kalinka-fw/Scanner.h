@@ -1,29 +1,100 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
+#define BUFFER_SIZE 10
+
 #include "Sensor.h"
 
+enum struct ScanningState {
+  Start,
+  Stop,
+  Scanning,
+  Pause,
+  Resume,
+  Pending,
+};
+
+enum struct ScanningDirection {
+  Horizontally = 1,
+  Vertically = 2,
+  Both =  3,
+};
+
+inline bool operator&(ScanningDirection a, ScanningDirection b)
+{
+  return static_cast<bool>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+class Buffer {
+  private:
+    SensorPacket buffer[BUFFER_SIZE];
+    int index = 0;
+  public:
+    void write(SensorPacket sp) {
+      buffer[index] = sp;
+      index += 1;
+    }
+    
+    unsigned int size() {
+      return sizeof(buffer) / sizeof(buffer[0]);
+    }
+};
+
 class Scanner {
-private:
-  void resetSensors();
-  void resetSceneOrigin();
+  private:
+    void resetSensors();
+    void resetSceneOrigin();
 
-  int scenePin;
+    const int handshake = 255;
 
-  float sceneAngle = 0.0;
-  Sensor sensor1;
-  Sensor sensor2;
+    Buffer buffer;
 
-public:
-  Scanner(const int sp, Sensor snr1, Sensor snr2):
-   scenePin(sp), sensor1(snr1), sensor2(snr2) {}
-  
-  void reset();
-  void rotateScene(float);
+    int scenePin;
 
-  float getSceneAngle() {
-    return sceneAngle;
-  }
+    float sceneAngle = 0.0;
+    Sensor sensor1;
+    Sensor sensor2;
+
+    ScanningState state = ScanningState::Pending;
+
+    // TODO: settable settings
+    const float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
+    const float MAX_SCENE_ROTATION = 180.0;
+    const float SENSOR_HEIGHT_STEP = 1.0;
+    const float SCENE_ROTATION_STEP = 1.0;
+    const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
+    const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
+    const float SENSOR_MAX_HEIGHT = 3.0;
+    ScanningDirection scannig_direction = ScanningDirection::Horizontally;
+
+  public:
+    Scanner(const int sp, Sensor snr1, Sensor snr2):
+      scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+
+    void reset();
+    void rotateScene(float);
+
+    float getSceneAngle() {
+      return sceneAngle;
+    }
+
+    const int getHandshake() {
+      return handshake;
+    }
+
+    void parseCommand(byte);
+
+    unsigned int pointsAvailable();
+
+    Buffer getBuffer() {
+      return buffer;
+    }
+
+    void move();
+
+    void next();
+
+    void readSensors();
 };
 
 #endif

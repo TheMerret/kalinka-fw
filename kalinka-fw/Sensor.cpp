@@ -46,3 +46,7 @@ void Sensor::reset() {
   resetVerticalAngle();
   resetHeight();
 }
+
+SensorPacket Sensor::read() {
+  return SensorPacket(height, horizontalAngle, verticalAngle, captureDistance());
+}
