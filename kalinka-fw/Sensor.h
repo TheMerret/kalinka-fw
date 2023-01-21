@@ -1,6 +1,12 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#define DEBUG_ON 1
+#define DEBUG_OFF 0
+const byte debugMode = DEBUG_OFF;
+#define DBGLN(...) debugMode == DEBUG_ON ? Serial.println(__VA_ARGS__) : NULL
+#define DBG(...) debugMode == DEBUG_ON ? Serial.print(__VA_ARGS__) : NULL
+
 #define MAX_SENSOR_VERTICAL_ROTATION 45.0
 
 struct SensorPacket {
@@ -11,6 +17,7 @@ struct SensorPacket {
   SensorPacket() = default;
   SensorPacket(float h, float ha, float va, float d)
     : height(h), horizontalAngle(ha), verticalAngle(va), distance(d) {}
+  byte *toBytes();
 };
 
 class Sensor {

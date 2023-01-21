@@ -1,9 +1,9 @@
 #ifndef KALINKA_UTILS_H
 #define KALINKA_UTILS_H
 
-void writeBuffer(SensorPacket* buffer) {
-  for (int i = 0; i < BUFFER_SIZE; i++) {
-    Serial.write((uint8_t*)(buffer + i), 4);
+void writeBuffer(byte *buffer, unsigned int length) {
+  for (int i = 0; i < length; i++) {
+    Serial.write(buffer + i, 1);
   }
 }
 

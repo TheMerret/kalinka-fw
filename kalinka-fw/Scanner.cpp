@@ -3,16 +3,15 @@
 #include "Scanner.h"
 
 void Scanner::rotateScene(float degree) {
-  Serial.print("rotate scene on ");
-  Serial.println(degree);
+  DBG("rotate scene on ");
+  DBGLN(degree);
   sceneAngle += degree;
 }
 
 
 void Scanner::resetSceneOrigin() {
-  // TODO: logging flag
-  Serial.println("scene reset rotation");
-  sceneAngle = 0;
+  DBGLN("scene reset rotation");
+  sceneAngle = 0.0;
 }
 
 void Scanner::resetSensors() {
@@ -27,22 +26,22 @@ void Scanner::reset() {
 
 void Scanner::parseCommand(byte command) {
   switch (command) {
-    case 1:
+    case '1':
       if (state == ScanningState::Stop or state == ScanningState::Pending) {
         state = ScanningState::Start;
       };
       break;
-    case 0:
+    case '0':
       if (state == ScanningState::Scanning) {
         state = ScanningState::Stop;
       };
       break;
-    case 3:
+    case '3':
       if (state == ScanningState::Scanning) {
         state = ScanningState::Pause;
       };
       break;
-    case 4:
+    case '4':
       if (state == ScanningState::Pause) {
         state = ScanningState::Resume;
       };
@@ -119,4 +118,23 @@ void Scanner::next() {
 void Scanner::readSensors() {
   buffer.write(sensor1.read());
   buffer.write(sensor2.read());
+}
+
+byte *Buffer::toBytes() {
+  byte raw[this->sizeRaw()];
+  for (int i=0;i<this->size();i++) {
+    memcpy(raw, buffer[i].toBytes(), sizeof(SensorPacket));
+  };
+  return raw;
+}
+
+byte *Scanner::toBytes() {
+  byte raw[sizeof(sceneAngle) + buffer.sizeRaw()];
+  memcpy(raw, &sceneAngle, sizeof(sceneAngle));
+  memcpy(raw + sizeof(sceneAngle), buffer.toBytes(), buffer.sizeRaw());
+  return raw;
+} 
+
+unsigned int Scanner::bytesLen() {
+  return sizeof(sceneAngle) + buffer.sizeRaw();
 }

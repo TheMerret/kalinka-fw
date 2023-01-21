@@ -36,8 +36,14 @@ class Buffer {
     }
     
     unsigned int size() {
-      return sizeof(buffer) / sizeof(buffer[0]);
+      return index;
     }
+
+    unsigned int sizeRaw() {
+      return index * sizeof(buffer[0]);
+    }
+
+    byte *toBytes();
 };
 
 class Scanner {
@@ -86,15 +92,15 @@ class Scanner {
 
     unsigned int pointsAvailable();
 
-    Buffer getBuffer() {
-      return buffer;
-    }
-
     void move();
 
     void next();
 
     void readSensors();
+
+    unsigned int bytesLen();
+
+    byte *toBytes();
 };
 
 #endif

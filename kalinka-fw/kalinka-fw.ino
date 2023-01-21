@@ -31,7 +31,7 @@ void loop() {
     scanner.parseCommand(command);
   }
   if (scanner.pointsAvailable() > 10) {
-    writeBuffer(scanner.getBuffer());
+    // writeBuffer(scanner.toBytes(), scanner.bytesLen());
   }
   scanner.next();
 }
