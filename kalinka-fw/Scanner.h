@@ -25,15 +25,12 @@ inline bool operator&(ScanningDirection a, ScanningDirection b)
   return static_cast<bool>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-class Buffer {
+class Buffer {  // TODO: move class to dedicated header
   private:
     SensorPacket buffer[BUFFER_SIZE];
     int index = 0;
   public:
-    void write(SensorPacket sp) {
-      buffer[index] = sp;
-      index += 1;
-    }
+    void write(SensorPacket sp);
     
     unsigned int size() {
       return index;
@@ -44,6 +41,8 @@ class Buffer {
     }
 
     byte *toBytes();
+
+    void clear();
 };
 
 class Scanner {
@@ -70,6 +69,7 @@ class Scanner {
     const float SCENE_ROTATION_STEP = 1.0;
     const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
     const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
+    const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
     const float SENSOR_MAX_HEIGHT = 3.0;
     ScanningDirection scannig_direction = ScanningDirection::Horizontally;
 
@@ -101,6 +101,10 @@ class Scanner {
     unsigned int bytesLen();
 
     byte *toBytes();
+
+    void clear();
+    
+    // TODO: add stop with buffer clear
 };
 
 #endif

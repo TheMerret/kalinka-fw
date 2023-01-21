@@ -21,7 +21,7 @@ Scanner scanner(SCANER_SCENE_PIN, sensor1, sensor2);
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-  Serial.write(scanner.getHandshake());
+  // Serial.write(scanner.getHandshake());
 }
 
 
@@ -30,8 +30,9 @@ void loop() {
     byte command = Serial.read();
     scanner.parseCommand(command);
   }
-  if (scanner.pointsAvailable() > 10) {
-    // writeBuffer(scanner.toBytes(), scanner.bytesLen());
+  if (scanner.pointsAvailable() == 10) {
+    writeBuffer(scanner.toBytes(), scanner.bytesLen());
+    scanner.clear();
   }
   scanner.next();
 }

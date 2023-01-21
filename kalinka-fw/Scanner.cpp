@@ -3,6 +3,7 @@
 #include "Scanner.h"
 
 void Scanner::rotateScene(float degree) {
+  // TODO: do only if not rotatating right now
   DBG("rotate scene on ");
   DBGLN(degree);
   sceneAngle += degree;
@@ -10,6 +11,7 @@ void Scanner::rotateScene(float degree) {
 
 
 void Scanner::resetSceneOrigin() {
+  // TODO: do only if not rotatating right now
   DBGLN("scene reset rotation");
   sceneAngle = 0.0;
 }
@@ -99,7 +101,7 @@ void Scanner::next() {
       reset();
       break;
     case ScanningState::Scanning:
-      next();
+      move();
       readSensors();
       break;
     case ScanningState::Stop:
@@ -116,16 +118,9 @@ void Scanner::next() {
 }
 
 void Scanner::readSensors() {
+  // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
   buffer.write(sensor1.read());
   buffer.write(sensor2.read());
-}
-
-byte *Buffer::toBytes() {
-  byte raw[this->sizeRaw()];
-  for (int i=0;i<this->size();i++) {
-    memcpy(raw, buffer[i].toBytes(), sizeof(SensorPacket));
-  };
-  return raw;
 }
 
 byte *Scanner::toBytes() {
@@ -137,4 +132,29 @@ byte *Scanner::toBytes() {
 
 unsigned int Scanner::bytesLen() {
   return sizeof(sceneAngle) + buffer.sizeRaw();
+}
+
+void Scanner::clear() {
+  buffer.clear();
+}
+
+byte *Buffer::toBytes() {
+  byte raw[this->sizeRaw()];
+  for (int i=0;i<this->size();i++) {
+    memcpy(raw, buffer[i].toBytes(), sizeof(SensorPacket));
+  };
+  return raw;
+}
+
+void Buffer::write(SensorPacket sp) {
+  if (index == BUFFER_SIZE) {
+    // TODO: raise error
+    return;
+  }
+  buffer[index] = sp;
+  index += 1;
+}
+
+void Buffer::clear() {
+  index = 0;  // TODO: may be a better way
 }
