@@ -1,6 +1,8 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include <Arduino.h>
+
 // TODO: debug macross in whole lib
 #define DEBUG_ON 1
 #define DEBUG_OFF 0

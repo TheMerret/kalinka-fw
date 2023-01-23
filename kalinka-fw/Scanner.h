@@ -1,9 +1,8 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#define BUFFER_SIZE 10
-
 #include "Sensor.h"
+#include "Buffer.h"
 
 enum struct ScanningState {
   Start,
@@ -24,26 +23,6 @@ inline bool operator&(ScanningDirection a, ScanningDirection b)
 {
   return static_cast<bool>(static_cast<int>(a) & static_cast<int>(b));
 }
-
-class Buffer {  // TODO: move class to dedicated header
-  private:
-    SensorPacket buffer[BUFFER_SIZE];
-    int index = 0;
-  public:
-    void write(SensorPacket sp);
-    
-    unsigned int size() {
-      return index;
-    }
-
-    unsigned int sizeRaw() {
-      return index * sizeof(buffer[0]);
-    }
-
-    byte *toBytes();
-
-    void clear();
-};
 
 class Scanner {
   private:
@@ -104,7 +83,7 @@ class Scanner {
 
     void clear();
     
-    // TODO: add stop with buffer clear
+    void stop();
 };
 
 #endif
