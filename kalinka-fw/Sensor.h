@@ -23,7 +23,9 @@ struct SensorPacket {
 
 class Sensor {
   private:
-    int heightPin;
+    int buttonPin;
+    int heightPinStep;
+    int heightPinDir;
     int horizontalPin;
     int verticalPin;
     int sensorPin;

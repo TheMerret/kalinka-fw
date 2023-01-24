@@ -18,6 +18,11 @@ Sensor sensor1(SENSOR1_HEIGHT_PIN, SENSOR1_HORIZONTAL_PIN, SENSOR1_VERTICAL_PIN,
 Sensor sensor2(SENSOR2_HEIGHT_PIN, SENSOR2_HORIZONTAL_PIN, SENSOR2_VERTICAL_PIN, SENSOR2_SENSOR_PIN);
 Scanner scanner(SCANER_SCENE_PIN, sensor1, sensor2);
 
+
+
+
+
+
 void setup() {
   Serial.begin(9600);
   while (!Serial);
