@@ -2,8 +2,24 @@
 
 #include "Scanner.h"
 
+Scanner::Scanner(const int sp, Sensor snr1, Sensor snr2):
+  scenePin(sp), sensor1(snr1), sensor2(snr2) {
+  pinMode(enablePin, OUTPUT);
+  digitalWrite(enablePin, LOW);
+
+  //  stepper.setMaxSpeed(1000);
+  //  stepper.setAcceleration(50);
+  //  stepper.setSpeed(200);
+
+  stepper.setMaxSpeed(10000);
+  stepper.setAcceleration(1500);
+  stepper.setSpeed(5000);
+}
+
 void Scanner::rotateScene(float degree) {
   // TODO: do only if not rotatating right now
+  stepper.moveTo(degree);
+  stepper.run();
   DBG("rotate scene on ");
   DBGLN(degree);
   sceneAngle += degree;

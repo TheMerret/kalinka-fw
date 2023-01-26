@@ -1,79 +1,86 @@
 #include <Arduino.h>
-#include <Multiservo.h>
-#include <AccelStepper.h>
 
 #include "Sensor.h"
 
-Multiservo SERVO_SENSOR_HORIZONTAL;
-Multiservo SERVO_SENSOR_VERTICAL;
-
-#define motorInterfaceType 1;
-AccelStepper myStepper(motorInterfaceType, heightPinStep, heightPinDir);
-
-const byte enablePin = 8;
-
-void setup() {
+Sensor::Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp)
+  : heightPinStep(htps),
+    heightPinDir(htpd),
+    horizontalPin(hlp),
+    verticalPin(vp),
+    sensorPin(sp),
+    stepper(motorInterfaceType, heightPinStep, heightPinDir),
+    buttonPin(bp) {
   pinMode(enablePin, OUTPUT);
   digitalWrite(enablePin, LOW);
-  
-  SERVO_SENSOR_VERTICAL.attach(verticalPin);
-  SERVO_SENSOR_HORIZONTAL.attach(horizontalPin);
+  pinMode(buttonPin, INPUT_PULLUP);
+  servo_sensor_horizontal.attach(horizontalPin);
+  //servo_sensor_vertical.attach(verticalPin);
 
-  myStepper.setMaxSpeed(1000);
-  myStepper.setAcceleration(50);
-  myStepper.setSpeed(200);
+  //  stepper.setMaxSpeed(1000);
+  //  stepper.setAcceleration(50);
+  //  stepper.setSpeed(200);
+
+  stepper.setMaxSpeed(10000);
+  stepper.setAcceleration(1500);
+  stepper.setSpeed(5000);
 }
 
-
-//+
 float Sensor::captureDistance() {
   // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
   DBGLN("sensor capture distance");
   float volts = analogRead(sensorPin) * 0.0048828125;
   return 13 * pow(volts, -1);
 }
-//+
+
 void Sensor::rotateVertically(float degree) {
-  // TODO: do only if not rotatating right now  
-  SERVO_SENSOR_VERTICAL.write(verticalAngle + degree);
+  // TODO: do only if not rotatating right now
+ servo_sensor_vertical.write(verticalAngle + degree);
   DBG("sensor 1 rotate vertically on ");
   DBGLN(degree);
   verticalAngle += degree;
 }
-//+
+
 void Sensor::rotateHorizontally(float degree) {
   // TODO: do only if not rotatating right now
-  SERVO_SENSOR_HORIZONTAL.write(horizontalAngle + degree);
+  servo_sensor_horizontal.write(horizontalAngle + degree);
   DBG("sensor 1 rotate horizontally on ");
   DBGLN(degree);
   horizontalAngle += degree;
 }
-//+
+
 void Sensor::raise(float h) {
   // TODO: do only if not raising right now
-  myStepper.moveTo(h);
-  myStepper.run();
+  stepper.moveTo(h);
+  stepper.run();
   DBG("sensor 1 raise on ");
   DBGLN(height);
   height += h;
 }
-//+
+
 void Sensor::resetHorizontalAngle() {
   // TODO: do only if not rotatating right now
-  SERVO_SENSOR_HORIZONTAL.write(90);
+  servo_sensor_horizontal.write(90);
   DBGLN("reset reset horizontal rotation");
   horizontalAngle = 0.0;
 }
-//+
+
 void Sensor::resetVerticalAngle() {
   // TODO: do only if not rotatating right now
-  SERVO_SENSOR_VERTICAL.write(90);
+  servo_sensor_vertical.write(90);
   DBGLN("sensor reset vertical rotation");
   verticalAngle = 0.0;  // TODO: (scannig_direction & SCANNING_VERTICALLY) ? -MAX_SENSOR_VERTICAL_ROTATION : 0.0;
 }
 
 void Sensor::resetHeight() {
   // TODO: do only if not raising right now
+  int pos = 0;
+  Serial.println(digitalRead(buttonPin));
+  if (digitalRead(buttonPin) && millis() % 300 == 0) {
+    pos += 50;
+    stepper.moveTo(pos);
+  }
+  Serial.println(digitalRead(buttonPin));
+  stepper.run();
   DBGLN("sensor reset height");
   height = 0.0;
 }

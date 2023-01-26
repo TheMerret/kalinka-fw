@@ -3,6 +3,12 @@
 
 #include <Arduino.h>
 
+#include <Multiservo.h>
+#include <AccelStepper.h>
+
+#define motorInterfaceType 1
+#define enablePin 8
+
 // TODO: debug macross in whole lib
 #define DEBUG_ON 1
 #define DEBUG_OFF 0
@@ -34,9 +40,13 @@ class Sensor {
     float horizontalAngle = 0.0;
     float verticalAngle = 0.0;
 
+    Multiservo servo_sensor_horizontal;
+    Multiservo servo_sensor_vertical;
+
+    AccelStepper stepper;
+
   public:
-    Sensor(const int htp, const int hlp, const int vp, const int sp)
-      : heightPin(htp), horizontalPin(hlp), verticalPin(vp), sensorPin(sp) {}
+    Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp);
 
     void reset();
     void resetHeight();

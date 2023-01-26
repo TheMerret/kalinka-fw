@@ -1,6 +1,8 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
+#include <AccelStepper.h>
+
 #include "Sensor.h"
 #include "Buffer.h"
 
@@ -34,6 +36,7 @@ class Scanner {
     Buffer buffer;
 
     int scenePin;
+    AccelStepper stepper;
 
     float sceneAngle = 0.0;
     Sensor sensor1;
@@ -53,8 +56,7 @@ class Scanner {
     ScanningDirection scannig_direction = ScanningDirection::Horizontally;
 
   public:
-    Scanner(const int sp, Sensor snr1, Sensor snr2):
-      scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+    Scanner(const int sp, Sensor snr1, Sensor snr2);
 
     void reset();
     void rotateScene(float);
