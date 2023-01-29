@@ -27,8 +27,7 @@ void setup() {
 
 void loop() {
   if (Serial.available() > 0) {
-    byte command = Serial.read();
-    scanner.parseCommand(command);
+    scanner.parseCommand(Serial);
   }
   if (scanner.pointsAvailable() == 10) {
     writeBuffer(scanner.toBytes(), scanner.bytesLen());
