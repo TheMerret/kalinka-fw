@@ -3,7 +3,7 @@
 byte *Buffer::toBytes() {
   byte raw[this->sizeRaw()];
   for (int i=0;i<this->size();i++) {
-    memcpy(raw, buffer[i].toBytes(), sizeof(SensorPacket));
+    memcpy(raw, buffer[i].serialize(), sizeof(SensorPacket));
   };
   return raw;
 }

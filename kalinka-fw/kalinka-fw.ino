@@ -29,7 +29,7 @@ void loop() {
   if (Serial.available() > 0) {
     scanner.parseCommand(Serial);
   }
-  if (scanner.pointsAvailable() == 10) {
+  if (scanner.pointsAvailable() == BUFFER_SIZE) {
     writeBuffer(scanner.toBytes(), scanner.bytesLen());
     scanner.clear();
   }

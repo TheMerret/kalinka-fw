@@ -58,11 +58,22 @@ SensorPacket Sensor::read() {
   return SensorPacket(height, horizontalAngle, verticalAngle, captureDistance());
 }
 
-byte *SensorPacket::toBytes() {
+byte *SensorPacket::serialize() {
+  /*
+  TODO: min size is 48
+  {
+  "sceneAngle": 1.1,
+  "height": 1.1,
+  "horizontalAngle": 1.1,
+  "verticalAngle": 1.1,
+  "distance": 1.1
+  }
+  */
   byte raw[sizeof(SensorPacket)];
-  memcpy(raw, &height, sizeof(height));
-  memcpy(raw + sizeof(height), &horizontalAngle, sizeof(horizontalAngle));
-  memcpy(raw + sizeof(height) + sizeof(horizontalAngle), &verticalAngle, sizeof(verticalAngle));
-  memcpy(raw + sizeof(height) + sizeof(horizontalAngle) + sizeof(verticalAngle), &distance, sizeof(distance));
+  memcpy(raw, &sceneAngle, sizeof(sceneAngle));
+  memcpy(raw + sizeof(sceneAngle), &height, sizeof(height));
+  memcpy(raw + sizeof(sceneAngle) + sizeof(height), &horizontalAngle, sizeof(horizontalAngle));
+  memcpy(raw + sizeof(sceneAngle) + sizeof(height) + sizeof(horizontalAngle), &verticalAngle, sizeof(verticalAngle));
+  memcpy(raw + sizeof(sceneAngle) + sizeof(height) + sizeof(horizontalAngle) + sizeof(verticalAngle), &distance, sizeof(distance));
   return raw;
 }

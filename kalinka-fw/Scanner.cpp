@@ -184,22 +184,23 @@ void Scanner::next() {
 void Scanner::readSensors() {
   // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
   SensorPacket sp1 = sensor1.read();
+  sp1.sceneAngle = sceneAngle;
   sp1.distance = get_distance_to_cube(sceneAngle, sp1.horizontalAngle, sp1.height, sp1.verticalAngle);
   buffer.write(sp1);
   SensorPacket sp2 = sensor2.read();
   sp2.distance = get_distance_to_cube(sceneAngle, sp2.horizontalAngle, sp2.height, sp2.verticalAngle);
+  sp1.sceneAngle = sceneAngle + 180.0;  // TODO: move constant to settings
   buffer.write(sp2);
 }
 
 byte* Scanner::toBytes() {
-  byte raw[sizeof(sceneAngle) + buffer.sizeRaw()];
-  memcpy(raw, &sceneAngle, sizeof(sceneAngle));
-  memcpy(raw + sizeof(sceneAngle), buffer.toBytes(), buffer.sizeRaw());
+  byte raw[buffer.sizeRaw()];
+  memcpy(raw, buffer.toBytes(), buffer.sizeRaw());
   return raw;
 }
 
 unsigned int Scanner::bytesLen() {
-  return sizeof(sceneAngle) + buffer.sizeRaw();
+  return buffer.sizeRaw();
 }
 
 void Scanner::clear() {

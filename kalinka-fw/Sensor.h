@@ -11,6 +11,7 @@ const byte debugMode = DEBUG_OFF;
 #define DBG(...) debugMode == DEBUG_ON ? Serial.print(__VA_ARGS__) : NULL
 
 struct SensorPacket {
+  float sceneAngle;
   float height;
   float horizontalAngle;
   float verticalAngle;
@@ -18,7 +19,7 @@ struct SensorPacket {
   SensorPacket() = default;
   SensorPacket(float h, float ha, float va, float d)
     : height(h), horizontalAngle(ha), verticalAngle(va), distance(d) {}
-  byte *toBytes();
+  byte *serialize();
 };
 
 class Sensor {
