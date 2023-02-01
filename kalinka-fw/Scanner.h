@@ -44,7 +44,6 @@ class Scanner {
 
     ScanningState state = ScanningState::Pending;
 
-    // TODO: settable settings
     float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
     float MAX_SCENE_ROTATION = 180.0;
     float SENSOR_HEIGHT_STEP = 1.0;

@@ -6,7 +6,7 @@
 // TODO: debug macross in whole lib
 #define DEBUG_ON 1
 #define DEBUG_OFF 0
-const byte debugMode = DEBUG_ON;
+const byte debugMode = DEBUG_OFF;
 #define DBGLN(...) debugMode == DEBUG_ON ? Serial.println(__VA_ARGS__) : NULL
 #define DBG(...) debugMode == DEBUG_ON ? Serial.print(__VA_ARGS__) : NULL
 

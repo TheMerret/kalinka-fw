@@ -1,8 +1,7 @@
-#include <string.h>
-#include <stdlib.h>
 #include <Arduino.h>
 
 #include "Scanner.h"
+#include "Utils.h"
 
 void Scanner::rotateScene(float degree) {
   // TODO: do only if not rotatating right now
@@ -184,8 +183,12 @@ void Scanner::next() {
 
 void Scanner::readSensors() {
   // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
-  buffer.write(sensor1.read());
-  buffer.write(sensor2.read());
+  SensorPacket sp1 = sensor1.read();
+  sp1.distance = get_distance_to_cube(sceneAngle, sp1.horizontalAngle, sp1.height, sp1.verticalAngle);
+  buffer.write(sp1);
+  SensorPacket sp2 = sensor2.read();
+  sp2.distance = get_distance_to_cube(sceneAngle, sp2.horizontalAngle, sp2.height, sp2.verticalAngle);
+  buffer.write(sp2);
 }
 
 byte* Scanner::toBytes() {
