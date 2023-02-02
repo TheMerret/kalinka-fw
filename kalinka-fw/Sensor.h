@@ -2,6 +2,9 @@
 #define SENSOR_H
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
+
+#define SENSOR_DOCUMENT_CAPACITY 48
 
 // TODO: debug macross in whole lib
 #define DEBUG_ON 1
@@ -16,10 +19,11 @@ struct SensorPacket {
   float horizontalAngle;
   float verticalAngle;
   float distance;
+  StaticJsonDocument<SENSOR_DOCUMENT_CAPACITY> doc;
   SensorPacket() = default;
   SensorPacket(float h, float ha, float va, float d)
     : height(h), horizontalAngle(ha), verticalAngle(va), distance(d) {}
-  byte *serialize();
+  StaticJsonDocument<SENSOR_DOCUMENT_CAPACITY> serialize();
 };
 
 class Sensor {

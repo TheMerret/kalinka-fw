@@ -40,6 +40,7 @@ void Scanner::parseCommand(HardwareSerial& input) {  // TODO: move to dedicated 
     argv[i] = json_doc["argv"][i];
   }
   this->mapCommand(cmd, argc, argv);
+  json_doc.clear();
 }
 
 void Scanner::mapCommand(char* cmd, int argc, char* argv[]) {
@@ -113,7 +114,7 @@ void Scanner::mapCommand(char* cmd, int argc, char* argv[]) {
       DBGLN(value);
     }
   } else {
-    Serial.println("error");  // TODO: better error output
+    {};  // TODO: better error output
   };
 }
 
@@ -185,18 +186,14 @@ void Scanner::readSensors() {
   // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
   SensorPacket sp1 = sensor1.read();
   sp1.sceneAngle = sceneAngle;
-  sp1.distance = get_distance_to_cube(sceneAngle, sp1.horizontalAngle, sp1.height, sp1.verticalAngle);
   buffer.write(sp1);
   SensorPacket sp2 = sensor2.read();
-  sp2.distance = get_distance_to_cube(sceneAngle, sp2.horizontalAngle, sp2.height, sp2.verticalAngle);
   sp1.sceneAngle = sceneAngle + 180.0;  // TODO: move constant to settings
   buffer.write(sp2);
 }
 
-byte* Scanner::toBytes() {
-  byte raw[buffer.sizeRaw()];
-  memcpy(raw, buffer.toBytes(), buffer.sizeRaw());
-  return raw;
+StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> Scanner::serialize() {
+  return buffer.serialize();
 }
 
 unsigned int Scanner::bytesLen() {

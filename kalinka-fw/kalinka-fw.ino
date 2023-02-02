@@ -10,6 +10,9 @@
 
 #define SCANER_SCENE_PIN 7
 
+#define ARDUINOJSON_ENABLE_INFINITY 1
+#include <ArduinoJson.h>
+
 #include "Scanner.h"
 #include "Sensor.h"
 #include "Utils.h"
@@ -30,7 +33,8 @@ void loop() {
     scanner.parseCommand(Serial);
   }
   if (scanner.pointsAvailable() == BUFFER_SIZE) {
-    writeBuffer(scanner.toBytes(), scanner.bytesLen());
+    serializeJson(scanner.serialize(), Serial);
+    Serial.println();
     scanner.clear();
   }
   scanner.next();

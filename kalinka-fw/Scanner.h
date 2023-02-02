@@ -7,6 +7,8 @@
 #include "Sensor.h"
 #include "Buffer.h"
 
+#define SCANNER_DOCUMENT_CAPACITY 48
+
 enum struct ScanningState {
   Start,
   Stop,
@@ -54,7 +56,7 @@ class Scanner {
     float SENSOR_MAX_HEIGHT = 3.0;
     ScanningDirection SCANNING_DIRECTION = ScanningDirection::Horizontally;
 
-    StaticJsonDocument<96> json_doc;
+    StaticJsonDocument<SCANNER_DOCUMENT_CAPACITY> json_doc;
 
   public:
     Scanner(const int sp, Sensor snr1, Sensor snr2):
@@ -85,7 +87,7 @@ class Scanner {
 
     unsigned int bytesLen();
 
-    byte *toBytes();
+    StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> serialize();
 
     void clear();
     
