@@ -2,14 +2,7 @@
 
 #include "Sensor.h"
 
-Sensor::Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp)
-  : heightPinStep(htps),
-    heightPinDir(htpd),
-    horizontalPin(hlp),
-    verticalPin(vp),
-    sensorPin(sp),
-    stepper(motorInterfaceType, heightPinStep, heightPinDir),
-    buttonPin(bp) {
+void Sensor::attach() {
   pinMode(enablePin, OUTPUT);
   digitalWrite(enablePin, LOW);
   pinMode(buttonPin, INPUT_PULLUP);

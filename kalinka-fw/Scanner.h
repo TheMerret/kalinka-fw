@@ -56,7 +56,10 @@ class Scanner {
     ScanningDirection scannig_direction = ScanningDirection::Horizontally;
 
   public:
-    Scanner(const int sp, Sensor snr1, Sensor snr2);
+    Scanner::Scanner(const int sp, Sensor snr1, Sensor snr2):
+    scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+
+    void attach();
 
     void reset();
     void rotateScene(float);

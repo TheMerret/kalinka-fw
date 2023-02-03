@@ -46,7 +46,15 @@ class Sensor {
     AccelStepper stepper;
 
   public:
-    Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp);
+    Sensor::Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp)
+    : heightPinStep(htps),
+    heightPinDir(htpd),
+    horizontalPin(hlp),
+    verticalPin(vp),
+    sensorPin(sp),
+    stepper(motorInterfaceType, heightPinStep, heightPinDir),
+    buttonPin(bp) {}
+    void attach();     
 
     void reset();
     void resetHeight();

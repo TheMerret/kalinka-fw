@@ -10,7 +10,7 @@
 #define SENSOR2_VERTICAL_PIN      14  //
 #define SENSOR2_SENSOR_PIN        15  //
 
-#define SCANER_SCENE_PIN 11
+#define SCANER_SCENE_PIN          11
 
 #include "Scanner.h"
 #include "Sensor.h"
@@ -24,7 +24,9 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
   Serial.println("begin");
-
+  scanner.attach();
+  sensor1.attach();
+  sensor2.attach();
   Serial.println("end");
   //Serial.write(scanner.getHandshake());
 }
