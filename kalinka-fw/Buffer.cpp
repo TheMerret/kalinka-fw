@@ -1,11 +1,7 @@
 #include "Buffer.h"
 
-byte *Buffer::toBytes() {
-  byte raw[this->sizeRaw()];
-  for (int i=0;i<this->size();i++) {
-    memcpy(raw, buffer[i].toBytes(), sizeof(SensorPacket));
-  };
-  return raw;
+StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> Buffer::serialize() {
+  return doc;
 }
 
 void Buffer::write(SensorPacket sp) {
@@ -13,10 +9,12 @@ void Buffer::write(SensorPacket sp) {
     // TODO: raise error
     return;
   }
-  buffer[index] = sp;
+  bool res = array.add(sp.serialize());
   index += 1;
 }
 
 void Buffer::clear() {
+  doc.clear();
+  array = doc.to<JsonArray>();
   index = 0;  // TODO: may be a better way
 }

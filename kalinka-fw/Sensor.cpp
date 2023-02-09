@@ -92,11 +92,21 @@ SensorPacket Sensor::read() {
   return SensorPacket(height, horizontalAngle, verticalAngle, captureDistance());
 }
 
-byte *SensorPacket::toBytes() {
-  byte raw[sizeof(SensorPacket)];
-  memcpy(raw, &height, sizeof(height));
-  memcpy(raw + sizeof(height), &horizontalAngle, sizeof(horizontalAngle));
-  memcpy(raw + sizeof(height) + sizeof(horizontalAngle), &verticalAngle, sizeof(verticalAngle));
-  memcpy(raw + sizeof(height) + sizeof(horizontalAngle) + sizeof(verticalAngle), &distance, sizeof(distance));
-  return raw;
+StaticJsonDocument<SENSOR_DOCUMENT_CAPACITY> SensorPacket::serialize() {
+  /*
+  TODO: min size is 48
+  {
+  "sceneAngle": 1.1,
+  "height": 1.1,
+  "horizontalAngle": 1.1,
+  "verticalAngle": 1.1,
+  "distance": 1.1
+  }
+  */
+  doc["sceneAngle"] = sceneAngle;
+  doc["height"] = height;
+  doc["horizontalAngle"] = horizontalAngle;
+  doc["verticalAngle"] = verticalAngle;
+  doc["distance"] = distance;
+  return doc;  
 }

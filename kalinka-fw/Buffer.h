@@ -1,13 +1,17 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#include <ArduinoJson.h>
+
 #include "Sensor.h"
 
 #define BUFFER_SIZE 10
+#define BUFFER_DOCUMENT_CAPACITY 512
 
 class Buffer {
   private:
-    SensorPacket buffer[BUFFER_SIZE];
+    StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> doc;
+    JsonArray array = doc.to<JsonArray>();
     int index = 0;
   public:
     void write(SensorPacket sp);
@@ -17,10 +21,10 @@ class Buffer {
     }
 
     unsigned int sizeRaw() {
-      return index * sizeof(buffer[0]);
+      return BUFFER_DOCUMENT_CAPACITY;
     }
 
-    byte *toBytes();
+    StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> serialize();
 
     void clear();
 };

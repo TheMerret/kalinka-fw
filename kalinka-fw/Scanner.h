@@ -2,9 +2,13 @@
 #define SCANNER_H
 
 #include <AccelStepper.h>
+#include <Arduino.h>
+#include <ArduinoJson.h>
 
 #include "Sensor.h"
 #include "Buffer.h"
+
+#define SCANNER_DOCUMENT_CAPACITY 48
 
 enum struct ScanningState {
   Start,
@@ -73,7 +77,9 @@ class Scanner {
       return handshake;
     }
 
-    void parseCommand(byte);
+    void parseCommand(HardwareSerial&);
+
+    void mapCommand(char*, int, char*[]);
 
     unsigned int pointsAvailable();
 
@@ -85,11 +91,9 @@ class Scanner {
 
     unsigned int bytesLen();
 
-    byte *toBytes();
+    StaticJsonDocument<BUFFER_DOCUMENT_CAPACITY> serialize();
 
     void clear();
     
     void stop();
 };
-
-#endif
