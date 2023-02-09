@@ -13,9 +13,9 @@ void Sensor::attach() {
   //  stepper.setAcceleration(50);
   //  stepper.setSpeed(200);
 
-  stepper.setMaxSpeed(10000);
-  stepper.setAcceleration(1500);
-  stepper.setSpeed(5000);
+  heightStepper.setMaxSpeed(10000);
+  heightStepper.setAcceleration(1500);
+  heightStepper.setSpeed(5000);
 }
 
 float Sensor::captureDistance() {
@@ -26,8 +26,8 @@ float Sensor::captureDistance() {
 }
 
 void Sensor::rotateVertically(float degree) {
-  // TODO: do only if not rotatating right now
- servo_sensor_vertical.write(verticalAngle + degree);
+  // TODO: do only if not rotatating  norightw
+  servo_sensor_vertical.write(verticalAngle + degree);
   DBG("sensor 1 rotate vertically on ");
   DBGLN(degree);
   verticalAngle += degree;
@@ -35,7 +35,7 @@ void Sensor::rotateVertically(float degree) {
 
 void Sensor::rotateHorizontally(float degree) {
   // TODO: do only if not rotatating right now
-  servo_sensor_horizontal.write(horizontalAngle + degree);
+  servo_sensor_horizontal.write(horizontalAngle + degree + 90);
   DBG("sensor 1 rotate horizontally on ");
   DBGLN(degree);
   horizontalAngle += degree;
@@ -43,8 +43,9 @@ void Sensor::rotateHorizontally(float degree) {
 
 void Sensor::raise(float h) {
   // TODO: do only if not raising right now
-  stepper.moveTo(h);
-  stepper.run();
+  Serial.println(heightPinStep);
+  heightStepper.moveTo(height + h);
+  heightStepper.run();
   DBG("sensor 1 raise on ");
   DBGLN(height);
   height += h;
@@ -70,10 +71,13 @@ void Sensor::resetHeight() {
   Serial.println(digitalRead(buttonPin));
   if (digitalRead(buttonPin) && millis() % 300 == 0) {
     pos += 50;
-    stepper.moveTo(pos);
+    heightStepper.moveTo(pos);
+    Serial.println();
+    Serial.println("DONE");
+    Serial.println();
   }
   Serial.println(digitalRead(buttonPin));
-  stepper.run();
+  heightStepper.run();
   DBGLN("sensor reset height");
   height = 0.0;
 }

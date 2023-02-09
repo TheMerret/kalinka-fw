@@ -35,7 +35,8 @@ class Scanner {
 
     Buffer buffer;
 
-    int scenePin;
+    int scenePinStep;
+    int scenePinDir;
     AccelStepper stepper;
 
     float sceneAngle = 0.0;
@@ -52,12 +53,12 @@ class Scanner {
     const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
     const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
     const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
-    const float SENSOR_MAX_HEIGHT = 3.0;
+    const float SENSOR_MAX_HEIGHT = 10.0;
     ScanningDirection scannig_direction = ScanningDirection::Horizontally;
 
   public:
-    Scanner::Scanner(const int sp, Sensor snr1, Sensor snr2):
-    scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+    Scanner::Scanner(const int sps, const int spd, Sensor snr1, Sensor snr2):
+    scenePinStep(sps), scenePinDir(spd), sensor1(snr1), sensor2(snr2), stepper(motorInterfaceType, scenePinStep, scenePinDir) {}
 
     void attach();
 

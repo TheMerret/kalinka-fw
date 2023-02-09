@@ -17,7 +17,7 @@ void Scanner::attach() {
 
 void Scanner::rotateScene(float degree) {
   // TODO: do only if not rotatating right now
-  stepper.moveTo(degree);
+  stepper.moveTo(sceneAngle + degree);
   stepper.run();
   DBG("rotate scene on ");
   DBGLN(degree);
@@ -144,7 +144,7 @@ byte *Scanner::toBytes() {
   memcpy(raw, &sceneAngle, sizeof(sceneAngle));
   memcpy(raw + sizeof(sceneAngle), buffer.toBytes(), buffer.sizeRaw());
   return raw;
-} 
+}
 
 unsigned int Scanner::bytesLen() {
   return sizeof(sceneAngle) + buffer.sizeRaw();

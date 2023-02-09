@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#include <Multiservo.h>
+#include <Servo.h>
 #include <AccelStepper.h>
 
 #define motorInterfaceType 1
@@ -40,10 +40,10 @@ class Sensor {
     float horizontalAngle = 0.0;
     float verticalAngle = 0.0;
 
-    Multiservo servo_sensor_horizontal;
-    Multiservo servo_sensor_vertical;
+    Servo servo_sensor_horizontal;
+    Servo servo_sensor_vertical;
 
-    AccelStepper stepper;
+    AccelStepper heightStepper;
 
   public:
     Sensor::Sensor(const int htps, const int htpd, const int hlp, const int vp, const int sp, const int bp)
@@ -52,7 +52,7 @@ class Sensor {
     horizontalPin(hlp),
     verticalPin(vp),
     sensorPin(sp),
-    stepper(motorInterfaceType, heightPinStep, heightPinDir),
+    heightStepper(motorInterfaceType, heightPinStep, heightPinDir),
     buttonPin(bp) {}
     void attach();     
 
