@@ -43,7 +43,6 @@ void Sensor::rotateHorizontally(float degree) {
 
 void Sensor::raise(float h) {
   // TODO: do only if not raising right now
-  Serial.println(heightPinStep);
   heightStepper.moveTo(height + h);
   heightStepper.run();
   DBG("sensor 1 raise on ");
@@ -68,15 +67,10 @@ void Sensor::resetVerticalAngle() {
 void Sensor::resetHeight() {
   // TODO: do only if not raising right now
   int pos = 0;
-  Serial.println(digitalRead(buttonPin));
   if (digitalRead(buttonPin) && millis() % 300 == 0) {
     pos += 50;
     heightStepper.moveTo(pos);
-    Serial.println();
-    Serial.println("DONE");
-    Serial.println();
   }
-  Serial.println(digitalRead(buttonPin));
   heightStepper.run();
   DBGLN("sensor reset height");
   height = 0.0;

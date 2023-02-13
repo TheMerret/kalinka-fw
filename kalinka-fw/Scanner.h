@@ -48,17 +48,18 @@ class Scanner {
     Sensor sensor2;
 
     ScanningState state = ScanningState::Pending;
+    
+    float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
+    float MAX_SCENE_ROTATION = 180.0;
+    float SENSOR_HEIGHT_STEP = 1.0;
+    float SCENE_ROTATION_STEP = 1.0;
+    float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
+    float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
+    float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
+    float SENSOR_MAX_HEIGHT = 3.0;
+    ScanningDirection SCANNING_DIRECTION = ScanningDirection::Horizontally;
 
-    // TODO: settable settings
-    const float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
-    const float MAX_SCENE_ROTATION = 180.0;
-    const float SENSOR_HEIGHT_STEP = 1.0;
-    const float SCENE_ROTATION_STEP = 1.0;
-    const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
-    const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
-    const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
-    const float SENSOR_MAX_HEIGHT = 10.0;
-    ScanningDirection scannig_direction = ScanningDirection::Horizontally;
+    StaticJsonDocument<SCANNER_DOCUMENT_CAPACITY> json_doc;
 
   public:
     Scanner::Scanner(const int sps, const int spd, Sensor snr1, Sensor snr2):
@@ -97,3 +98,5 @@ class Scanner {
     
     void stop();
 };
+
+#endif
