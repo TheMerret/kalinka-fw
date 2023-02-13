@@ -1,6 +1,7 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
+#include <AccelStepper.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
@@ -38,7 +39,9 @@ class Scanner {
 
     Buffer buffer;
 
-    int scenePin;
+    int scenePinStep;
+    int scenePinDir;
+    AccelStepper stepper;
 
     float sceneAngle = 0.0;
     Sensor sensor1;
@@ -46,21 +49,22 @@ class Scanner {
 
     ScanningState state = ScanningState::Pending;
 
-    float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
-    float MAX_SCENE_ROTATION = 180.0;
-    float SENSOR_HEIGHT_STEP = 1.0;
-    float SCENE_ROTATION_STEP = 1.0;
-    float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
-    float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
-    float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
-    float SENSOR_MAX_HEIGHT = 3.0;
-    ScanningDirection SCANNING_DIRECTION = ScanningDirection::Horizontally;
-
-    StaticJsonDocument<SCANNER_DOCUMENT_CAPACITY> json_doc;
+    // TODO: settable settings
+    const float MAX_SCENE_ROTATION_STEP = 30.0;  // degree
+    const float MAX_SCENE_ROTATION = 180.0;
+    const float SENSOR_HEIGHT_STEP = 1.0;
+    const float SCENE_ROTATION_STEP = 1.0;
+    const float SENSOR_HORIZONTAL_ROTATION_STEP = 1.0;
+    const float SENSOR_VERTICAL_ROTATION_STEP = 1.0;
+    const float MAX_SENSOR_VERTICAL_ROTATION = 45.0;
+    const float SENSOR_MAX_HEIGHT = 10.0;
+    ScanningDirection scannig_direction = ScanningDirection::Horizontally;
 
   public:
-    Scanner(const int sp, Sensor snr1, Sensor snr2):
-      scenePin(sp), sensor1(snr1), sensor2(snr2) {}
+    Scanner::Scanner(const int sps, const int spd, Sensor snr1, Sensor snr2):
+    scenePinStep(sps), scenePinDir(spd), sensor1(snr1), sensor2(snr2), stepper(motorInterfaceType, scenePinStep, scenePinDir) {}
+
+    void attach();
 
     void reset();
     void rotateScene(float);
@@ -93,5 +97,3 @@ class Scanner {
     
     void stop();
 };
-
-#endif
