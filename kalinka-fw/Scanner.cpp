@@ -137,9 +137,12 @@ unsigned int Scanner::pointsAvailable() {
   return buffer.size();
 }
 
+
+
 void Scanner::move() {
   if ((sceneAngle + SCENE_ROTATION_STEP == MAX_SCENE_ROTATION) and (sensor1.getHeight() + SENSOR_HEIGHT_STEP > SENSOR_MAX_HEIGHT)) {
     state = ScanningState::Stop;
+    return;
   };
   if (SCANNING_DIRECTION & ScanningDirection::Vertically) {
     if (sensor1.getVerticalAngle() != MAX_SENSOR_VERTICAL_ROTATION) {
@@ -201,9 +204,11 @@ void Scanner::readSensors() {
   // TOD0: do only if all task done: scene rotated, scanners tasks done (raised, rotated), buffer not full
   SensorPacket sp1 = sensor1.read();
   sp1.sceneAngle = sceneAngle;
+  sp1.distance = get_distance_to_cube(sp1.sceneAngle, sp1.horizontalAngle, 3, sp1.verticalAngle);
   buffer.write(sp1);
   SensorPacket sp2 = sensor2.read();
-  sp1.sceneAngle = sceneAngle + 180.0;  // TODO: move constant to settings
+  sp2.sceneAngle = sceneAngle + 180.0;  // TODO: move constant to settings
+  sp2.distance = get_distance_to_cube(sp2.sceneAngle, sp2.horizontalAngle, 3, sp2.verticalAngle);
   buffer.write(sp2);
 }
 
@@ -221,4 +226,8 @@ void Scanner::clear() {
 
 void Scanner::stop() {
   this->clear();
+}
+
+bool Scanner::isStopped() {
+  return (state == ScanningState::Stop);
 }

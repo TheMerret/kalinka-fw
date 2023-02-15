@@ -35,7 +35,7 @@ void loop() {
   if (Serial.available() > 0) {
     scanner.parseCommand(Serial);
   }
-  if (scanner.pointsAvailable() == BUFFER_SIZE) {
+  if (scanner.pointsAvailable() == BUFFER_SIZE or scanner.isStopped()) {
     serializeJson(scanner.serialize(), Serial);
     Serial.println();
     scanner.clear();

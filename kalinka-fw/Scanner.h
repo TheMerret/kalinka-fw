@@ -97,6 +97,8 @@ class Scanner {
     void clear();
     
     void stop();
+
+    bool isStopped();
 };
 
 #endif
